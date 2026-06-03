@@ -1,0 +1,9 @@
+.next
+node_modules
+npm-debug.log
+.git
+.env*
+!.env.local.example
+supabase/.temp
+README.md
+.DS_Store

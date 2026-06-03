@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# VMI Order Builder
 
-## Getting Started
+Internal NWCS tool for drafting Vendor-Managed Inventory orders for partner retailers.
 
-First, run the development server:
+**Phase 1 scope:** ingest Headset CSVs, translate partner SKU names to NWCS catalog SKUs, and resolve unmapped rows via a fuzzy-match queue. Order quantity calculation, substitution, and Cultivera integration come in later phases.
+
+## Stack
+
+- Next.js 16 (App Router, TypeScript) on port **5737**
+- Supabase (Postgres + Auth)
+- Tailwind v4 + shadcn/ui
+- Fuse.js for fuzzy matching
+- papaparse for CSV
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.local.example .env.local
+# fill in Supabase URL + keys and ALLOWED_EMAILS
+
+npm install
+npm run dev   # http://localhost:5737
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Database setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Create a Supabase project (https://supabase.com/dashboard).
+2. In the SQL editor, paste and run `supabase/migrations/0001_phase1_schema.sql`.
+3. Enable magic-link email auth (default in new projects).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Seeding the NWCS catalog
 
-## Learn More
+```bash
+npm run seed:catalog path/to/catalog.json
+```
 
-To learn more about Next.js, take a look at the following resources:
+Expected JSON: array of `{ sku, name, product_family, strain_type, dosage, format, active }`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project layout
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+app/
+  (auth)/login          magic-link login
+  (app)/                sidebar shell (auth-gated)
+    page.tsx            partners dashboard
+    partners/new        create partner
+    partners/[id]       overview + tabs
+      upload            CSV upload + column mapper
+      snapshots/[id]    snapshot review
+        unmapped        fuzzy-match queue (core Phase 1)
+      mappings          translation map editor
+      settings          edit / archive partner
+  auth/callback         Supabase OAuth callback
+lib/
+  supabase/             client, server, proxy helpers
+  csv/                  parser + column mapper
+  matching/             fuse.js wrapper
+  cultivera/            STUB — Phase 3
+supabase/migrations/    SQL schema
+scripts/                seed-catalog, etc.
+```
 
-## Deploy on Vercel
+## Phase 1 success criteria
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Create a partner.
+2. Upload a Headset CSV.
+3. Resolve every unmapped row via the unmapped queue.
+4. View a fully-translated snapshot.
+5. Repeat upload — previously-mapped SKUs auto-match; only new SKUs appear in the queue.
