@@ -324,6 +324,77 @@ async function cmdAction(sb: SupabaseClient, args: Args) {
   console.log(data!.id);
 }
 
+type BatchAction = {
+  action: string;
+  result: string;
+  line_id?: string;
+  step?: number;
+  selector_kind?: string;
+  selector?: string;
+  target?: string;
+  input?: string;
+  result_detail?: string;
+  attempt?: number;
+  duration_ms?: number;
+  mcp_tool?: string;
+};
+
+/**
+ * Bulk-insert many actions in one round trip. Reads a JSON array from stdin
+ * (or --file=path). Each element: { action, result, line_id?, selector_kind?,
+ * selector?, target?, input?, result_detail?, attempt?, duration_ms?,
+ * mcp_tool?, step? }. step_index auto-assigned from the current max when omitted.
+ */
+async function cmdActions(sb: SupabaseClient, args: Args) {
+  const f = args.flags;
+  const build_id = args._[0] ?? opt(f, "build-id");
+  if (!build_id) fail("actions requires a build_id (positional or --build-id)");
+
+  const file = opt(f, "file");
+  const raw = file
+    ? fs.readFileSync(path.resolve(process.cwd(), file), "utf8")
+    : fs.readFileSync(0, "utf8"); // stdin
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    fail("actions: stdin/--file must be a JSON array");
+  }
+  if (!Array.isArray(parsed)) fail("actions: expected a JSON array");
+  const items = parsed as BatchAction[];
+  if (items.length === 0) {
+    console.log("0 actions");
+    return;
+  }
+
+  let step = await nextStepIndex(sb, build_id);
+  const rows = items.map((a) => {
+    if (!a.action) fail("actions: every element needs an 'action'");
+    if (!a.result) fail("actions: every element needs a 'result'");
+    return {
+      cart_build_id: build_id,
+      cart_build_line_id: a.line_id ?? null,
+      step_index: a.step ?? step++,
+      action: a.action,
+      selector_kind: a.selector_kind
+        ? oneOf(a.selector_kind, SELECTOR_KINDS, "selector_kind")
+        : null,
+      selector: a.selector ?? null,
+      target_description: a.target ?? null,
+      input_value: a.input ?? null,
+      result: oneOf(a.result, RESULTS, "result"),
+      result_detail: a.result_detail ?? null,
+      attempt: a.attempt ?? 1,
+      duration_ms: a.duration_ms ?? null,
+      mcp_tool: a.mcp_tool ?? null,
+    };
+  });
+
+  const { error } = await sb.from("cart_build_actions").insert(rows);
+  if (error) fail(`actions failed: ${error.message}`);
+  console.log(`${rows.length} actions`);
+}
+
 async function cmdEnd(sb: SupabaseClient, args: Args) {
   const f = args.flags;
   const build_id = args._[0] ?? opt(f, "build-id");
@@ -391,11 +462,13 @@ async function main() {
       return cmdLine(sb, args);
     case "action":
       return cmdAction(sb, args);
+    case "actions":
+      return cmdActions(sb, args);
     case "end":
       return cmdEnd(sb, args);
     default:
       fail(
-        `unknown verb "${verb ?? ""}". Use: start | line | action | end. ` +
+        `unknown verb "${verb ?? ""}". Use: start | line | action | actions | end. ` +
           `See the header of scripts/track-cart.ts for examples.`,
       );
   }
