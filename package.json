@@ -9,6 +9,7 @@
     "lint": "eslint",
     "seed:catalog": "tsx scripts/seed-catalog.ts",
     "track": "tsx scripts/track-cart.ts",
+    "kb:regen": "tsx scripts/regen-cart-kb.ts",
     "test:qty": "node --test --import tsx tests/qty.test.ts",
     "postinstall": "playwright install chromium"
   },
