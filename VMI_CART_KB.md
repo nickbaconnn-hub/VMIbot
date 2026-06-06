@@ -1,8 +1,8 @@
 # VMI Cart-Build Knowledge Base
 
 > **Auto-generated — do not hand-edit.** Run `npm run kb:regen` to refresh.
-> Generated 2026-06-03T21:19:16.883Z from **0 build(s)** (0 completed),
-> **0 line decision(s)**, **0 browser action(s)**.
+> Generated 2026-06-06T22:44:11.257Z from **1 build(s)** (1 completed),
+> **52 line decision(s)**, **0 browser action(s)**.
 >
 > Curated prose (auth model, naming conventions, the canonical flow) lives in
 > [PLAYWRIGHT_KB.md](./PLAYWRIGHT_KB.md). This file is the *empirical* layer: what
@@ -17,7 +17,13 @@
 
 ## Confirmed build flow (by driver)
 
-_No builds recorded yet. The canonical flow is in PLAYWRIGHT_KB.md §1.3 until data accumulates._
+### Driver: `chrome_mcp` — 1 build(s)
+
+Action frequency (most common first):
+
+| Action | Times | OK rate |
+|---|---|---|
+
 
 ## Selectors: stable vs flaky
 
@@ -25,7 +31,24 @@ _No selector data yet._
 
 ## Decision rules that have held up
 
-_No line decisions recorded yet._
+Outcome distribution across all recorded lines:
+
+| Outcome | Lines | Share |
+|---|---|---|
+| filled | 37 | 71% |
+| skipped | 11 | 21% |
+| partial | 2 | 4% |
+| not_found | 2 | 4% |
+
+Reason distribution:
+
+| Reason | Lines | Share |
+|---|---|---|
+| matched_clean | 37 | 71% |
+| out_of_stock | 10 | 19% |
+| partial_inventory | 2 | 4% |
+| product_not_found | 2 | 4% |
+| no_substitute | 1 | 2% |
 
 ## Known failure modes + fallbacks
 
@@ -33,4 +56,21 @@ _No failures recorded yet. Known modes (from prior sessions) are in PLAYWRIGHT_K
 
 ## Per-account quirks
 
-_No builds recorded yet._
+### FLOYDS SEDRO WOOLLEY
+
+- Builds recorded: **1**
+- Avg cart line count: 39
+- Sheet-total match rate: — (0/0)
+- Lines partial-filled: 2
+- Substitutions: 0
+- Recurring out-of-stock items:
+  - Legends Blue Runtz (2×)
+  - Crystal Clear Blue Dream (1×)
+  - 1988 Blunts Maui Wowie (1×)
+  - Crystal Clear Pink Cookies (1×)
+  - Crystal Clear Grape Pie (1×)
+  - Crystal Clear Nerdz (1×)
+  - 1988 Blunts Northern Lights (1×)
+  - Mini Budz Candyland (1×)
+  - Mini Budz GMO (1×)
+
