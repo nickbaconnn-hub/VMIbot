@@ -1,7 +1,7 @@
 # VMI Cart-Build Knowledge Base
 
 > **Auto-generated — do not hand-edit.** Run `npm run kb:regen` to refresh.
-> Generated 2026-06-07T02:00:30.017Z from **1 build(s)** (1 completed),
+> Generated 2026-06-07T02:07:33.155Z from **1 build(s)** (1 completed),
 > **52 line decision(s)**, **0 browser action(s)**.
 >
 > Curated prose (auth model, naming conventions, the canonical flow) lives in
@@ -36,16 +36,16 @@ Outcome distribution across all recorded lines:
 | Outcome | Lines | Share |
 |---|---|---|
 | filled | 37 | 71% |
-| skipped | 13 | 25% |
-| not_found | 2 | 4% |
+| skipped | 14 | 27% |
+| not_found | 1 | 2% |
 
 Reason distribution:
 
 | Reason | Lines | Share |
 |---|---|---|
 | matched_clean | 37 | 71% |
-| out_of_stock | 12 | 23% |
-| product_not_found | 2 | 4% |
+| out_of_stock | 13 | 25% |
+| product_not_found | 1 | 2% |
 | no_substitute | 1 | 2% |
 
 ## Known failure modes + fallbacks
