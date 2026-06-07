@@ -1,7 +1,7 @@
 # VMI Cart-Build Knowledge Base
 
 > **Auto-generated — do not hand-edit.** Run `npm run kb:regen` to refresh.
-> Generated 2026-06-06T22:44:11.257Z from **1 build(s)** (1 completed),
+> Generated 2026-06-07T02:00:30.017Z from **1 build(s)** (1 completed),
 > **52 line decision(s)**, **0 browser action(s)**.
 >
 > Curated prose (auth model, naming conventions, the canonical flow) lives in
@@ -36,8 +36,7 @@ Outcome distribution across all recorded lines:
 | Outcome | Lines | Share |
 |---|---|---|
 | filled | 37 | 71% |
-| skipped | 11 | 21% |
-| partial | 2 | 4% |
+| skipped | 13 | 25% |
 | not_found | 2 | 4% |
 
 Reason distribution:
@@ -45,8 +44,7 @@ Reason distribution:
 | Reason | Lines | Share |
 |---|---|---|
 | matched_clean | 37 | 71% |
-| out_of_stock | 10 | 19% |
-| partial_inventory | 2 | 4% |
+| out_of_stock | 12 | 23% |
 | product_not_found | 2 | 4% |
 | no_substitute | 1 | 2% |
 
@@ -59,9 +57,9 @@ _No failures recorded yet. Known modes (from prior sessions) are in PLAYWRIGHT_K
 ### FLOYDS SEDRO WOOLLEY
 
 - Builds recorded: **1**
-- Avg cart line count: 39
+- Avg cart line count: 37
 - Sheet-total match rate: — (0/0)
-- Lines partial-filled: 2
+- Lines partial-filled: 0
 - Substitutions: 0
 - Recurring out-of-stock items:
   - Legends Blue Runtz (2×)
@@ -69,8 +67,9 @@ _No failures recorded yet. Known modes (from prior sessions) are in PLAYWRIGHT_K
   - 1988 Blunts Maui Wowie (1×)
   - Crystal Clear Pink Cookies (1×)
   - Crystal Clear Grape Pie (1×)
+  - Crystal Clear Pink Ink (1×)
+  - Mini Budz Super Boof (1×)
   - Crystal Clear Nerdz (1×)
   - 1988 Blunts Northern Lights (1×)
   - Mini Budz Candyland (1×)
-  - Mini Budz GMO (1×)
 
